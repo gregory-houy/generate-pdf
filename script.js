@@ -7,8 +7,8 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Remplacez ces chaînes par les chaînes Base64 de vos images
-const base64LyceeLogo = 'VOTRE_CHAINE_BASE64_DU_LOGO_LYCEE';
-const base64MdlLogo = 'VOTRE_CHAINE_BASE64_DU_LOGO_MDL';
+const base64LyceeLogo = ''; // Remplacez par votre chaîne Base64 du logo du lycée
+const base64MdlLogo = ''; // Remplacez par votre chaîne Base64 du logo MDL
 
 async function fetchAdherents() {
     try {
@@ -48,7 +48,7 @@ async function generatePDFs() {
             { text: `Classe: ${adherent.classe}`, margin: [0, 0, 0, 5] },
             { text: `Identifiant: ${adherent.username}`, margin: [0, 20, 0, 5] },
             { text: `Mot de passe: ${adherent.password}`, margin: [0, 0, 0, 5] },
-            { text: `Code: ${adherent.code}`, margin: [0, 0, 0, 5] }, // Modifié de "Code unique" à "Code"
+            { text: `Code: ${adherent.code}`, margin: [0, 0, 0, 5] },
             ...(index < adherents.length - 1 ? [{ text: '', pageBreak: 'after' }] : [])
         ];
         documentContent.push(...pageContent);
@@ -71,18 +71,16 @@ async function generatePDFs() {
         defaultStyle: {
             font: 'Helvetica'
         },
-        // Ajout de la définition des polices pour éviter les erreurs de format
         fonts: {
             Helvetica: {
-                normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica.ttf',
-                bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica-Bold.ttf',
-                italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica-Oblique.ttf',
-                bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica-BoldOblique.ttf'
+                normal: 'Helvetica',
+                bold: 'Helvetica-Bold',
+                italics: 'Helvetica-Oblique',
+                bolditalics: 'Helvetica-BoldOblique'
             }
         }
     };
 
-    // Assurez-vous que pdfFonts est bien importé dans votre HTML
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
     
     pdfMake.createPdf(docDefinition).download('Fiches_Adherents.pdf');
