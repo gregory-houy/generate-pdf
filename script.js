@@ -6,6 +6,10 @@ const supabaseUrl = 'https://iarukjyswplvmtcxjtbx.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcnVranlzd3Bsdm10Y3hqdGJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNTYwMjUsImV4cCI6MjA3MTYzMjAyNX0.jC33JZm5vwOROpxEMBCRQTaGwe-TF06fRMHg1UcoHxY';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// Remplacez ces chaînes par les chaînes Base64 de vos images
+const base64LyceeLogo = 'VOTRE_CHAINE_BASE64_DU_LOGO_LYCEE';
+const base64MdlLogo = 'VOTRE_CHAINE_BASE64_DU_LOGO_MDL';
+
 async function fetchAdherents() {
     try {
         const { data, error } = await supabase
@@ -31,23 +35,56 @@ async function generatePDFs() {
 
     adherents.forEach((adherent, index) => {
         const pageContent = [
-            { text: `Lycée` },
-            { text: `CHÂTEAU BLANC` },
-            { text: `Nom: ${adherent.nom}` },
-            { text: `Prénom: ${adherent.prenom}` },
-            { text: `Classe: ${adherent.classe}` },
-            { text: `Identifiant: ${adherent.username}` },
-            { text: `Mot de passe: ${adherent.password}` },
-            { text: `Code unique: ${adherent.code}` },
+            {
+                columns: [
+                    { image: base64MdlLogo, width: 100, alignment: 'left' },
+                    { image: base64LyceeLogo, width: 100, alignment: 'right' }
+                ]
+            },
+            { text: 'Lycée', style: 'header' },
+            { text: 'CHÂTEAU BLANC', style: 'subheader' },
+            { text: `Nom: ${adherent.nom}`, margin: [0, 20, 0, 5] },
+            { text: `Prénom: ${adherent.prenom}`, margin: [0, 0, 0, 5] },
+            { text: `Classe: ${adherent.classe}`, margin: [0, 0, 0, 5] },
+            { text: `Identifiant: ${adherent.username}`, margin: [0, 20, 0, 5] },
+            { text: `Mot de passe: ${adherent.password}`, margin: [0, 0, 0, 5] },
+            { text: `Code: ${adherent.code}`, margin: [0, 0, 0, 5] }, // Modifié de "Code unique" à "Code"
             ...(index < adherents.length - 1 ? [{ text: '', pageBreak: 'after' }] : [])
         ];
         documentContent.push(...pageContent);
     });
 
     const docDefinition = {
-        content: documentContent
+        content: documentContent,
+        styles: {
+            header: {
+                fontSize: 18,
+                bold: true,
+                margin: [0, 0, 0, 10]
+            },
+            subheader: {
+                fontSize: 16,
+                bold: true,
+                margin: [0, 5, 0, 15]
+            }
+        },
+        defaultStyle: {
+            font: 'Helvetica'
+        },
+        // Ajout de la définition des polices pour éviter les erreurs de format
+        fonts: {
+            Helvetica: {
+                normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica.ttf',
+                bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica-Bold.ttf',
+                italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica-Oblique.ttf',
+                bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Helvetica/Helvetica-BoldOblique.ttf'
+            }
+        }
     };
 
+    // Assurez-vous que pdfFonts est bien importé dans votre HTML
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    
     pdfMake.createPdf(docDefinition).download('Fiches_Adherents.pdf');
 }
 
