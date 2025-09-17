@@ -10,7 +10,7 @@ async function fetchAdherents() {
     try {
         const { data, error } = await supabase
             .from('adherents')
-            .select('nom, prenom, identifiant, mot_de_passe');
+            .select('nom, prenom, username, password'); // Corrected column names here
         if (error) throw error;
         return data;
     } catch (err) {
@@ -34,8 +34,8 @@ async function generatePDFs() {
                 { text: 'CHÂTEAU BLANC', style: 'subheader' },
                 { text: `Nom: ${adherent.nom}`, margin: [0, 20, 0, 5] },
                 { text: `Prénom: ${adherent.prenom}`, margin: [0, 0, 0, 5] },
-                { text: `Identifiant: ${adherent.identifiant}`, margin: [0, 20, 0, 5] },
-                { text: `Mot de passe: ${adherent.mot_de_passe}`, margin: [0, 0, 0, 5] },
+                { text: `Identifiant: ${adherent.username}`, margin: [0, 20, 0, 5] }, // Updated to use 'username'
+                { text: `Mot de passe: ${adherent.password}`, margin: [0, 0, 0, 5] }, // Updated to use 'password'
             ],
             styles: {
                 header: {
