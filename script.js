@@ -60,10 +60,6 @@ async function generatePDFs() {
                 bold: true,
                 margin: [0, 5, 0, 15]
             }
-        },
-        defaultStyle: {
-            // S'assurer que le style par défaut utilise les polices que vous définissez
-            font: 'Helvetica'
         }
     };
 
