@@ -2,8 +2,8 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 // Mettez à jour ces valeurs avec vos propres clés
-const supabaseUrl = 'VOTRE_URL_SUPABASE';
-const supabaseAnonKey = 'VOTRE_CLE_ANON';
+const supabaseUrl = 'https://iarukjyswplvmtcxjtbx.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcnVranlzd3Bsdm10Y3hqdGJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNTYwMjUsImV4cCI6MjA3MTYzMjAyNX0.jC33JZm5vwOROpxEMBCRQTaGwe-TF06fRMHg1UcoHxY';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function fetchAdherents() {
